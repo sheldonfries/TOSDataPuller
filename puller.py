@@ -1,6 +1,7 @@
 import tosdb
 import csv
 import threading
+import time
 from config import *
 tosdb.init(root=dir)
 tosdb.set_block_limit(20)
@@ -40,19 +41,20 @@ while True:
     times = [topic_frames[0].LAST[1], topic_frames[1].LAST[1], topic_frames[2].LAST[1]]
     for x in range(len(topics)):
         if(vols[x] != '' and vols[x] != 'loading'):
-            vol_changes[x] = int(vols[x]) - last_vols[x]
-            price_changes[x] = float(prices[x]) - last_prices[x]
+            vol_changes[x] = float(vols[x]) - float(last_vols[x])
+            price_changes[x] = float(prices[x]) - float(last_prices[x])
             if vol_changes[x] != 0:
                 temp = topics[x] + ": Volume Change - " + str(vol_changes[x]) + " Price Change - " + str(price_changes[x])
                 print(temp)
-                last_vols[x] = vol_changes[x]
-                last_prices[x] = price_changes[x]
+                last_vols[x] = vols[x]
+                last_prices[x] = prices[x]
                 if x == 0:
-                    data_SPY.extend([times[x], vol_changes[x], price_changes[x]])
+                    data_SPY = [times[x], vol_changes[x], price_changes[x]]
                 elif x == 1:
-                    data_GOOG.extend([times[x], vol_changes[x], price_changes[x]])
+                    data_GOOG = [times[x], vol_changes[x], price_changes[x]]
                 elif x == 2:
-                    data_AAPL.extend([times[x], vol_changes[x], price_changes[x]])
-                threading.Timer(10, printResults, [x]).start()
+                    data_AAPL = [times[x], vol_changes[x], price_changes[x]]
+                printResults(x)
+                time.sleep(1)
     
 tosdb.clean_up()
