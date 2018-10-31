@@ -8,5 +8,5 @@ Pulls data from ThinkOrSwim via TOSDataBridge and dumps to csv files.
 
 ## Use
 - Edit config.py with the appropriate values.
-
+- Run the script in a command prompt: 
 ` py puller.py `
